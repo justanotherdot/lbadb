@@ -1,9 +1,9 @@
 use std::io;
 
 struct InputBuffer<'a> {
-    buffer: &'a String,
+    buffer: &'a mut String,
     length: usize,
-    capacity: usize,
+    capacity: usize, // XXX Unused for now.
 }
 
 fn print_prompt() {
@@ -13,12 +13,13 @@ fn print_prompt() {
 }
 
 fn read_input(input: &mut InputBuffer) {
-    match io::stdin().read_line(input.buffer) {
+    match io::stdin().read_line(&mut input.buffer) {
         Ok(bytes_read) => {
             input.length = bytes_read;
         },
         Err(err) => panic!("Error reading input: {}", err),
     };
+    // Discard whitespace and trailing newline.
     input.buffer.trim();
 }
 
@@ -28,12 +29,15 @@ fn main() {
         print_prompt();
 
         // Input.
+        // TODO can probably get away initialising this inside of `read_input' and then passing it
+        // along back to the caller as an immutable object initially.
         let mut input: InputBuffer = InputBuffer {
-            buffer: String::new(),
+            buffer: &mut String::new(),
             length: 0,
-            capacity: 0,
+            capacity: 0, // XXX Unused for now.
         };
         read_input(&mut input);
+        println!("'{}'", input.buffer);
         if input.buffer == ".exit" {
             break;
         }
