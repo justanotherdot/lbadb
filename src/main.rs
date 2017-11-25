@@ -16,11 +16,10 @@ fn read_input(input: &mut InputBuffer) {
     match io::stdin().read_line(&mut input.buffer) {
         Ok(bytes_read) => {
             input.length = bytes_read;
+            input.buffer.truncate(bytes_read - 1); // XXX Remove trailing newline.
         },
         Err(err) => panic!("Error reading input: {}", err),
     };
-    // Discard whitespace and trailing newline.
-    input.buffer.trim();
 }
 
 fn main() {
@@ -29,15 +28,12 @@ fn main() {
         print_prompt();
 
         // Input.
-        // TODO can probably get away initialising this inside of `read_input' and then passing it
-        // along back to the caller as an immutable object initially.
         let mut input: InputBuffer = InputBuffer {
             buffer: &mut String::new(),
             length: 0,
             capacity: 0, // XXX Unused for now.
         };
         read_input(&mut input);
-        println!("'{}'", input.buffer);
         if input.buffer == ".exit" {
             break;
         }
