@@ -3,7 +3,6 @@ use std::io;
 struct InputBuffer<'a> {
     buffer: &'a mut String,
     length: usize,
-    capacity: usize, // XXX Unused for now.
 }
 
 fn print_prompt() {
@@ -31,7 +30,6 @@ fn main() {
         let mut input: InputBuffer = InputBuffer {
             buffer: &mut String::new(),
             length: 0,
-            capacity: 0, // XXX Unused for now.
         };
         read_input(&mut input);
         if input.buffer == ".exit" {
