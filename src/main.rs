@@ -36,6 +36,8 @@ fn main() {
         read_input(&mut input);
         if input.buffer == ".exit" {
             break;
+        } else {
+            println!("Unrecognized command: '{}'", input.buffer);
         }
     }
 }
