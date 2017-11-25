@@ -37,7 +37,7 @@ fn main() {
         if input.buffer == ".exit" {
             break;
         } else {
-            println!("Unrecognized command: '{}'", input.buffer);
+            println!("Unrecognized command: '{}'.", input.buffer);
         }
     }
 }
