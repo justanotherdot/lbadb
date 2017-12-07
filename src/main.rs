@@ -1,5 +1,9 @@
 use std::io;
 
+#[macro_use]
+extern crate nom;
+use nom::{IResult,Needed,Err,ErrorKind};
+
 struct InputBuffer<'a> {
     buffer: &'a mut String,
     length: usize,
@@ -51,9 +55,16 @@ fn do_meta_command(input: &mut InputBuffer) -> MetaCommandResult {
     }
 }
 
+// Parser combinators.
+
+// TODO This needs case insensitivity.
+named!(insert<&str, &str>, ws!(tag_s!("insert")));
+
 fn prepare_statement(input: &mut InputBuffer, statement: &mut Statement) -> PrepareResult {
     if input.length >= 6 && &input.buffer[0..6] == "insert" {
         statement.tag = StatementType::STATEMENT_INSERT;
+        let ir = insert(input.buffer);
+        println!("{:?}", ir);
         PrepareResult::PREPARE_SUCCESS
     } else if input.buffer == "select" {
         statement.tag = StatementType::STATEMENT_SELECT;
